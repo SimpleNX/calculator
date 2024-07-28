@@ -1,24 +1,19 @@
 const display = document.querySelector("#display");
 const btnCont = document.querySelector("#op-btns");
 const body = document.querySelector("body");
-let firstNumber = false, operation = "",  secondNumber = false;
+let firstNumber = null, operation = null,  secondNumber = null;
 
 body.addEventListener("keydown", (event)=>{
     let btnHit = event.key;
-    if(btnHit == "AC"){
-        clearDisplay();
-        firstNumber = false;
-        operation = false;
-        secondNumber = false;
-    }
+    if(btnHit == "AC")
+        setDefaultState();
     else if(btnHit == "="){
-        if(!firstNumber || !secondNumber)
+        if(firstNumber===null || secondNumber===null)
             displayResult("Operand missing!");
         else{
             displayResult(firstNumber);
-            firstNumber = false;
-            operation = false;
-            secondNumber = false;
+            operation = null;
+            secondNumber = null;
         }
     } 
     else{
@@ -29,16 +24,16 @@ body.addEventListener("keydown", (event)=>{
 btnCont.addEventListener("click", (event)=>{
     let btnHit = event.target.id;
     if(btnHit == "AC"){
-        clearDisplay();
-        firstNumber = false;
-        operation = false;
-        secondNumber = false;
+        setDefaultState();
     }
     else if(btnHit == "="){
-        displayResult(firstNumber);
-        firstNumber = false;
-        operation = false;
-        secondNumber = false;
+        if(firstNumber===null || secondNumber===null)
+            displayResult("Operand missing!");
+        else{
+            displayResult(firstNumber);
+            operation = null;
+            secondNumber = null;
+        }
     } 
     else{
         operate(btnHit);
@@ -53,6 +48,9 @@ function operate(argument){
     };
     let multiply = (firstNumber, secondNumber)=> (firstNumber*secondNumber);
     let percent = (firstNumber) => (firstNumber/100);
+    let isOperator = (op) =>{
+        return (op == "+" || op=="-" || op=="/" || op=="*" || op=="%");
+    };
     if(!isNaN(+argument)){
         if(!firstNumber){
             firstNumber = +argument;
@@ -71,11 +69,16 @@ function operate(argument){
                 firstNumber = multiply(firstNumber, secondNumber);
         }
     }
-    else{
+    else if(isOperator(argument)){
         operation = argument;
-        console.log(operation);
-        if(operation == "%")
+        if(operation == "%"){
             firstNumber = percent(firstNumber);
+            secondNumber = 1;
+        }
+        else if(firstNumber && secondNumber){
+            displayResult(firstNumber);
+            secondNumber = null;
+        }
     }
 }
 
@@ -83,6 +86,9 @@ function displayResult(value){
     display.textContent = value;
 }
 
-function clearDisplay(){
-    display.textContent = "";
+function setDefaultState(){
+    display.textContent = "0";
+    firstNumber = null;
+    operation = null;
+    secondNumber = null;
 }

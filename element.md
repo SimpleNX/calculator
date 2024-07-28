@@ -17,20 +17,20 @@ A function that displays the numbers and the results with operation
 on the display section, with a display value variable. **Done**
 
 First make it for only two values, and then equals. **Done**
-Then add support for multiple inputs.
+Then add support for multiple inputs. **Done**
 
-'=' press invokes operate(); 
+'=' press invokes operate(); //Redundant, simultaneous calcs better.
 
 display shows the result on invoke. **Done**
 
-Round the values with long decimals.
-Handle '=' if a operand is missing.
+Round the values with long decimals. 
+Handle '=' if a operand is missing. **Done**
 'Clear' should wipe out any existing data. **Done**
 Error message if /0 is tried.**Done**
 
 Support floating point input with '.', and that there can be one
 decimal point in any number.
-Backspace support to undo.
+Backspace support to undo. 
 Keyboard support. **Done**
 
 
