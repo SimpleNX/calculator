@@ -2,84 +2,59 @@ const display = document.querySelector("#display");
 const btnCont = document.querySelector("#op-btns");
 const body = document.querySelector("body");
 let firstNumber = null, operation = null,  secondNumber = null;
-
+let inputStream = "";
+let isOperator = (op) =>{
+    return (op == "+" || op=="-" || op=="/" || op=="*" || op=="%");
+};
+let isNumericDot = (op) =>{
+    let num = +op;
+    return (!isNaN(num) || op==".");
+};
 body.addEventListener("keydown", (event)=>{
     let btnHit = event.key;
-    if(btnHit == "AC")
-        setDefaultState();
-    else if(btnHit == "="){
-        if(firstNumber===null || secondNumber===null)
-            displayResult("Operand missing!");
-        else{
-            displayResult(firstNumber);
-            operation = null;
-            secondNumber = null;
-        }
-    } 
-    else{
-        operate(btnHit);
-    }
+    handleInput(btnHit);
 });
 
 btnCont.addEventListener("click", (event)=>{
     let btnHit = event.target.id;
-    if(btnHit == "AC"){
-        setDefaultState();
-    }
-    else if(btnHit == "="){
-        if(firstNumber===null || secondNumber===null)
-            displayResult("Operand missing!");
-        else{
-            displayResult(firstNumber);
-            operation = null;
-            secondNumber = null;
-        }
-    } 
-    else{
-        operate(btnHit);
-    }
+    handleInput(btnHit);
 });
+
+function handlePreviousProcess(opNow = null){
+    secondNumber = +inputStream
+    result = operate(operation);
+    displayResult(result);
+    secondNumber = null;
+    inputStream = "";
+    operation = opNow;
+}
 
 function operate(argument){
     let add = (firstNumber, secondNumber) => (firstNumber + secondNumber);
     let subtract = (firstNumber, secondNumber)=>(firstNumber-secondNumber);
     let divide = (firstNumber, secondNumber)=>{
-        return (secondNumber==0) ? "Division by 0 is not defined" : firstNumber/secondNumber;
+        return (secondNumber==0) ? Infinity : firstNumber/secondNumber;
     };
     let multiply = (firstNumber, secondNumber)=> (firstNumber*secondNumber);
     let percent = (firstNumber) => (firstNumber/100);
-    let isOperator = (op) =>{
-        return (op == "+" || op=="-" || op=="/" || op=="*" || op=="%");
-    };
-    if(!isNaN(+argument)){
-        if(!firstNumber){
-            firstNumber = +argument;
-            displayResult(firstNumber);
-        }
-        else if(!secondNumber){
-            secondNumber = +argument;
-            displayResult(secondNumber);
-            if(operation == "+")
-                firstNumber = add(firstNumber, secondNumber);
-            else if(operation == "-")
-                firstNumber = subtract(firstNumber, secondNumber);
-            else if(operation == "/")
-                firstNumber = divide(firstNumber, secondNumber);
-            else if(operation == "*")
-                firstNumber = multiply(firstNumber, secondNumber);
-        }
-    }
-    else if(isOperator(argument)){
-        operation = argument;
-        if(operation == "%"){
+    if(isOperator(argument)){
+        if(operation == "+")
+            firstNumber = add(firstNumber, secondNumber);
+        else if(operation == "-")
+            firstNumber = subtract(firstNumber, secondNumber);
+        else if(operation == "/")
+            firstNumber = divide(firstNumber, secondNumber);
+        else if(operation == "*")
+            firstNumber = multiply(firstNumber, secondNumber);
+        else if(operation == "%")
             firstNumber = percent(firstNumber);
-            secondNumber = 1;
+        if(firstNumber === Infinity){
+            firstNumber = null, secondNumber = null, operation = null, inputStream = "";
+            return "Operation by 0 is undefined";
         }
-        else if(firstNumber && secondNumber){
-            displayResult(firstNumber);
-            secondNumber = null;
-        }
+        firstNumber = (+firstNumber.toFixed(3));
     }
+    return firstNumber;
 }
 
 function displayResult(value){
@@ -91,4 +66,44 @@ function setDefaultState(){
     firstNumber = null;
     operation = null;
     secondNumber = null;
+    inputStream = "";
+}
+
+function handleInput(btnHit){
+    if(btnHit == "Delete")
+        setDefaultState();
+    else if(btnHit === "Enter"){
+        if(secondNumber === null && inputStream.length>0){
+            handlePreviousProcess();
+        }
+        else if(firstNumber===null || secondNumber===null && inputStream.length==0){
+            displayResult("Operand missing!");
+        }
+    } 
+    else if(btnHit==="Backspace"){
+        console.log("Here");
+        inputStream = inputStream.substring(0, inputStream.length-1);
+        displayResult(inputStream);
+    }
+    else{
+        if(isOperator(btnHit)){
+            if(firstNumber === null){
+                firstNumber = +inputStream;
+                inputStream = "";
+                operation = btnHit;
+                if(operation == "%"){
+                    operate(operation);
+                    operation = null;
+                }
+            }
+            else if(secondNumber===null){
+                handlePreviousProcess(btnHit);
+            }
+        }
+        else if(isNumericDot(btnHit)){
+            if(!(inputStream.includes(".")==true && btnHit == "."))
+                inputStream += btnHit;
+                displayResult(inputStream);
+        }
+    }
 }

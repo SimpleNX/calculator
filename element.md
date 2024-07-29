@@ -19,7 +19,7 @@ on the display section, with a display value variable. **Done**
 First make it for only two values, and then equals. **Done**
 Then add support for multiple inputs. **Done**
 
-'=' press invokes operate(); //Redundant, simultaneous calcs better.
+'=' press invokes operate(); **Done**
 
 display shows the result on invoke. **Done**
 
@@ -29,8 +29,8 @@ Handle '=' if a operand is missing. **Done**
 Error message if /0 is tried.**Done**
 
 Support floating point input with '.', and that there can be one
-decimal point in any number.
-Backspace support to undo. 
+decimal point in any number.**Done**
+Backspace support to undo. **Done**
 Keyboard support. **Done**
 
 
