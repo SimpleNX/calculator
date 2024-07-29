@@ -27,16 +27,19 @@ function handlePreviousProcess(opNow = null){
             throw "Operand Missing";
     }
     catch(error){
-        displayResult(error);
-        operation = null;
-        inputStream = firstNumber.toString();
-        secondNumber = null, firstNumber = null;
+        if(operation === "="){
+            displayResult(error);
+            inputStream = firstNumber.toString();
+            firstNumber = null, secondNumber=null;
+            operation = null;
+        }
         return;
     }
     result = operate(operation);
     displayResult(result);
     secondNumber = null;
-    inputStream = "";
+    inputStream = firstNumber.toString();
+    firstNumber = null;
     operation = opNow;
 }
 
