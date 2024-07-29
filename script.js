@@ -2,7 +2,6 @@ const display = document.querySelector("#display");
 const btnCont = document.querySelector("#op-btns");
 const body = document.querySelector("body");
 let firstNumber = null, operation = null,  secondNumber = null;
-let firstSign = 1, secondSign=1;
 let inputStream = "";
 let isOperator = (op) =>{
     return (op == "+" || op=="-" || op=="/" || op=="*" || op=="%");
@@ -22,7 +21,9 @@ btnCont.addEventListener("click", (event)=>{
 });
 
 function handlePreviousProcess(opNow = null){
-    secondNumber = secondSign*(+inputStream);
+    console.log(inputStream);
+    secondNumber = parseInt(inputStream);
+    console.log(secondNumber);
     secondSign = 1;
     result = operate(operation);
     displayResult(result);
@@ -83,25 +84,14 @@ function handleInput(btnHit){
         }
     } 
     else if(btnHit==="Backspace"){
-        console.log("Here");
         inputStream = inputStream.substring(0, inputStream.length-1);
         displayResult(inputStream);
     }
     else{
-        if(isOperator(btnHit)){
-            if(inputStream.length == 0){
-                if(firstNumber===null){
-                    if(btnHit=="-")
-                        firstSign = -1;
-                }
-                else if(secondNumber===null){
-                    if(btnHit=="-")
-                        secondSignSign = -1;  
-                }
-            }
+        if(isOperator(btnHit) && inputStream.length!=0){
             if(firstNumber === null){
-                firstNumber = firstSign*(+inputStream);
-                firstSign = 1;
+                firstNumber = parseInt(inputStream);
+                console.log(firstNumber);
                 inputStream = "";
                 operation = btnHit;
                 if(operation == "%"){
@@ -114,7 +104,7 @@ function handleInput(btnHit){
                 handlePreviousProcess(btnHit);
             }
         }
-        else if(isNumericDot(btnHit)){
+        else if(isNumericDot(btnHit) || isOperator(btnHit)){
             if(!(inputStream.includes(".")==true && btnHit == "."))
                 inputStream += btnHit;
                 displayResult(inputStream);
