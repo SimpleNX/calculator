@@ -2,7 +2,8 @@ const display = document.querySelector("#display");
 const btnCont = document.querySelector("#op-btns");
 const body = document.querySelector("body");
 let firstNumber = null, operation = null,  secondNumber = null;
-let inputStream = "", precedeOp = "+";
+let firstSign = 1, secondSign=1;
+let inputStream = "";
 let isOperator = (op) =>{
     return (op == "+" || op=="-" || op=="/" || op=="*" || op=="%");
 };
@@ -21,10 +22,8 @@ btnCont.addEventListener("click", (event)=>{
 });
 
 function handlePreviousProcess(opNow = null){
-    secondNumber = +inputStream;
-    if(precedeOp == "-")
-        secondNumber *= -1;
-    precedeOp = "+";
+    secondNumber = secondSign*(+inputStream);
+    secondSign = 1;
     result = operate(operation);
     displayResult(result);
     secondNumber = null;
@@ -90,16 +89,19 @@ function handleInput(btnHit){
     }
     else{
         if(isOperator(btnHit)){
-            if(btnHit == "-" || btnHit == "+" && inputStream.length==0){
-                precedeOp = btnHit;
-            }
-            else if(firstNumber === null){
-                firstNumber = +inputStream;
-                if(precedeOp == "-"){
-                    firstNumber *= -1;
-                    displayResult(firstNumber);
+            if(inputStream.length == 0){
+                if(firstNumber===null){
+                    if(btnHit=="-")
+                        firstSign = -1;
                 }
-                precedeOp = "+";
+                else if(secondNumber===null){
+                    if(btnHit=="-")
+                        secondSignSign = -1;  
+                }
+            }
+            if(firstNumber === null){
+                firstNumber = firstSign*(+inputStream);
+                firstSign = 1;
                 inputStream = "";
                 operation = btnHit;
                 if(operation == "%"){
