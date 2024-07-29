@@ -3,10 +3,11 @@ body {
     justify-content: center;
     align-items: center;
     font-family: 'Roboto', 'Helvetica', sans-serif;
+    background-color: rgb(185, 183, 183);
 }
 
 #calc {
-    background-color: black;
+    background-color: rgb(26, 19, 19);
     box-sizing: border-box;
     height: 755px;
     width: 500px;
@@ -14,12 +15,12 @@ body {
     flex-direction: column;
     align-items: center;
     gap : 5px;
-    border-radius: 5px;
+    border-radius: 15px;
 }
 
 #display {
     background-color: lightyellow;
-    width: 460px;
+    width: 440px;
     height: 200px;
     margin: 20px;
     border: 1px solid yellow;
@@ -38,10 +39,10 @@ body {
 .btn{
     background-color: lightblue;
     box-sizing: border-box;
-    margin : 6px 6px;
+    margin : 5px 5px;
     width : 104px;
     height : 84px;
-    border: 1px solid yellow;
+    border: 2px solid rgb(238, 238, 30);
     border-radius: 12px;
     text-align: center;
     font-size: 30px;
@@ -51,4 +52,11 @@ body {
 
 .btn.zero{
     width : 220px;
+}
+
+.num{
+    background-color: rgb(155, 155, 243);
+}
+.util{
+    background-color: rgb(241, 61, 61);
 }

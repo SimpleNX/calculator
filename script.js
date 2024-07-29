@@ -2,7 +2,7 @@ const display = document.querySelector("#display");
 const btnCont = document.querySelector("#op-btns");
 const body = document.querySelector("body");
 let firstNumber = null, operation = null,  secondNumber = null;
-let inputStream = "";
+let inputStream = "", precedeOp = "+";
 let isOperator = (op) =>{
     return (op == "+" || op=="-" || op=="/" || op=="*" || op=="%");
 };
@@ -21,7 +21,10 @@ btnCont.addEventListener("click", (event)=>{
 });
 
 function handlePreviousProcess(opNow = null){
-    secondNumber = +inputStream
+    secondNumber = +inputStream;
+    if(precedeOp == "-")
+        secondNumber *= -1;
+    precedeOp = "+";
     result = operate(operation);
     displayResult(result);
     secondNumber = null;
@@ -50,7 +53,7 @@ function operate(argument){
             firstNumber = percent(firstNumber);
         if(firstNumber === Infinity){
             firstNumber = null, secondNumber = null, operation = null, inputStream = "";
-            return "Operation by 0 is undefined";
+            return "Division by 0 is undefined";
         }
         firstNumber = (+firstNumber.toFixed(3));
     }
@@ -87,12 +90,21 @@ function handleInput(btnHit){
     }
     else{
         if(isOperator(btnHit)){
-            if(firstNumber === null){
+            if(btnHit == "-" || btnHit == "+" && inputStream.length==0){
+                precedeOp = btnHit;
+            }
+            else if(firstNumber === null){
                 firstNumber = +inputStream;
+                if(precedeOp == "-"){
+                    firstNumber *= -1;
+                    displayResult(firstNumber);
+                }
+                precedeOp = "+";
                 inputStream = "";
                 operation = btnHit;
                 if(operation == "%"){
                     operate(operation);
+                    displayResult(firstNumber);
                     operation = null;
                 }
             }
