@@ -22,6 +22,17 @@ btnCont.addEventListener("click", (event)=>{
 
 function handlePreviousProcess(opNow = null){
     secondNumber = parseInt(inputStream);
+    try{
+        if(isNaN(secondNumber))
+            throw "Operand Missing";
+    }
+    catch(error){
+        displayResult(error);
+        operation = null;
+        inputStream = firstNumber.toString();
+        secondNumber = null, firstNumber = null;
+        return;
+    }
     result = operate(operation);
     displayResult(result);
     secondNumber = null;
@@ -73,11 +84,10 @@ function handleInput(btnHit){
     if(btnHit == "Delete")
         setDefaultState();
     else if(btnHit === "Enter"){
-        if(secondNumber === null && inputStream.length>0){
+        if(firstNumber === null)
+            displayResult("Operand Missing");
+        else if(secondNumber === null && inputStream.length>=0){
             handlePreviousProcess();
-        }
-        else if(firstNumber===null || secondNumber===null && inputStream.length==0){
-            displayResult("Operand missing!");
         }
     } 
     else if(btnHit==="Backspace"){
