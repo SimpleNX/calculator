@@ -21,10 +21,7 @@ btnCont.addEventListener("click", (event)=>{
 });
 
 function handlePreviousProcess(opNow = null){
-    console.log(inputStream);
     secondNumber = parseInt(inputStream);
-    console.log(secondNumber);
-    secondSign = 1;
     result = operate(operation);
     displayResult(result);
     secondNumber = null;
@@ -91,7 +88,6 @@ function handleInput(btnHit){
         if(isOperator(btnHit) && inputStream.length!=0){
             if(firstNumber === null){
                 firstNumber = parseInt(inputStream);
-                console.log(firstNumber);
                 inputStream = "";
                 operation = btnHit;
                 if(operation == "%"){
