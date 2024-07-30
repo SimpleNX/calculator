@@ -21,7 +21,7 @@ btnCont.addEventListener("click", (event)=>{
 });
 
 function handlePreviousProcess(opNow = null){
-    secondNumber = parseInt(inputStream);
+    secondNumber = parseFloat(inputStream);
     try{
         if(isNaN(secondNumber))
             throw "Operand Missing";
@@ -66,7 +66,7 @@ function operate(argument){
             firstNumber = null, secondNumber = null, operation = null, inputStream = "";
             return "Division by 0 is undefined";
         }
-        firstNumber = (+firstNumber.toFixed(3));
+        firstNumber = (firstNumber.toFixed(3));
     }
     return firstNumber;
 }
@@ -75,8 +75,8 @@ function displayResult(value){
     display.textContent = value;
 }
 
-function setDefaultState(){
-    display.textContent = "0";
+function setDefaultState(text){
+    display.textContent = text;
     firstNumber = null;
     operation = null;
     secondNumber = null;
@@ -85,12 +85,13 @@ function setDefaultState(){
 
 function handleInput(btnHit){
     if(btnHit == "Delete")
-        setDefaultState();
+        setDefaultState("0");
     else if(btnHit === "Enter"){
         if(firstNumber === null)
             displayResult("Operand Missing");
         else if(secondNumber === null && inputStream.length>=0){
             handlePreviousProcess();
+            setDefaultState(inputStream);
         }
     } 
     else if(btnHit==="Backspace"){
@@ -100,12 +101,14 @@ function handleInput(btnHit){
     else{
         if(isOperator(btnHit) && inputStream.length!=0){
             if(firstNumber === null){
-                firstNumber = parseInt(inputStream);
+                firstNumber = parseFloat(inputStream);
                 inputStream = "";
                 operation = btnHit;
                 if(operation == "%"){
                     operate(operation);
                     displayResult(firstNumber);
+                    inputStream = firstNumber.toString();
+                    firstNumber = null;
                     operation = null;
                 }
             }
